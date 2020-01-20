@@ -1,0 +1,15 @@
+# JetBrains
+out/
+.idea/
+.idea_modules/
+
+# Go
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.test
+*.out
+
+vendor/
