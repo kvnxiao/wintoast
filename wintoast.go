@@ -73,33 +73,33 @@ $APP_ID = '{{if .AppID}}{{.AppID}}{{else}}Windows App{{end}}'
 
 $template = @"
 <toast activationType="{{.ActivationType}}" launch="{{.ActivationArguments}}" duration="{{.Duration}}" {{if .Timestamp}}displayTimestamp="{{.Timestamp}}{{end}}">
-	{{if .Header}}
-	<header id=".Header.Id" title=".Header.Title" arguments=".Header.Arguments" />
-	{{end}}
+    {{if .Header}}
+    <header id=".Header.Id" title=".Header.Title" arguments=".Header.Arguments" />
+    {{end}}
     <visual>
         <binding template="ToastGeneric">
             {{if .Icon}}
             <image placement="appLogoOverride" src="{{.Icon}}" />
             {{end}}
-			{{if .Hero}}
-			<image placement="hero" src="{{.Hero}}" />
-			{{end}}
+            {{if .Hero}}
+            <image placement="hero" src="{{.Hero}}" />
+            {{end}}
             {{if .Title}}
             <text><![CDATA[{{.Title}}]]></text>
             {{end}}
             {{if .Message}}
             <text><![CDATA[{{.Message}}]]></text>
             {{end}}
-			{{if .Attribution}}
-			<text><![CDATA[{{.Attribution}}]]></text>
-			{{end}}
+            {{if .Attribution}}
+            <text><![CDATA[{{.Attribution}}]]></text>
+            {{end}}
         </binding>
     </visual>
     {{if ne .Audio "silent"}}
-	<audio src="{{.Audio}}" loop="{{.Loop}}" />
-	{{else}}
-	<audio silent="true" />
-	{{end}}
+    <audio src="{{.Audio}}" loop="{{.Loop}}" />
+    {{else}}
+    <audio silent="true" />
+    {{end}}
     {{if .Actions}}
     <actions>
         {{range .Actions}}
