@@ -2,9 +2,9 @@ package wintoast
 
 import (
 	"bytes"
-	"html/template"
 	"os/exec"
 	"syscall"
+	"text/template"
 )
 
 type Audio string
@@ -72,34 +72,18 @@ func init() {
 $APP_ID = '{{if .AppID}}{{.AppID}}{{else}}Windows App{{end}}'
 
 $template = @"
-<toast activationType="{{.ActivationType}}" launch="{{.ActivationArguments}}" duration="{{.Duration}}" {{if .Timestamp}}displayTimestamp="{{.Timestamp}}{{end}}">
-    {{if .Header}}
-    <header id=".Header.Id" title=".Header.Title" arguments=".Header.Arguments" />
-    {{end}}
+<toast activationType="{{.ActivationType}}" launch="{{.ActivationArguments}}" duration="{{.Duration}}">
     <visual>
         <binding template="ToastGeneric">
-            {{if .Icon}}
-            <image placement="appLogoOverride" src="{{.Icon}}" />
-            {{end}}
-            {{if .Hero}}
-            <image placement="hero" src="{{.Hero}}" />
-            {{end}}
-            {{if .Title}}
-            <text><![CDATA[{{.Title}}]]></text>
-            {{end}}
-            {{if .Message}}
-            <text><![CDATA[{{.Message}}]]></text>
-            {{end}}
-            {{if .Attribution}}
-            <text><![CDATA[{{.Attribution}}]]></text>
-            {{end}}
+            {{if .Icon}}<image placement="appLogoOverride" {{if .HintCropCircle}}hint-crop="circle"{{end}} src="{{.Icon}}" />{{end}}
+            {{if .Hero}}<image placement="hero" src="{{.Hero}}" />{{end}}
+            {{if .InlineImage}}<image src="{{.InlineImage}}" />{{end}}
+            {{if .Title}}<text><![CDATA[{{.Title}}]]></text>{{end}}
+            {{if .Message}}<text><![CDATA[{{.Message}}]]></text>{{end}}
+            {{if .Attribution}}<text><![CDATA[{{.Attribution}}]]></text>{{end}}
         </binding>
     </visual>
-    {{if ne .Audio "silent"}}
-    <audio src="{{.Audio}}" loop="{{.Loop}}" />
-    {{else}}
-    <audio silent="true" />
-    {{end}}
+    {{if ne .Audio "silent"}}<audio src="{{.Audio}}" loop="{{.Loop}}" />{{else}}<audio silent="true" />{{end}}
     {{if .Actions}}
     <actions>
         {{range .Actions}}
@@ -123,17 +107,13 @@ type Action struct {
 	ImageURI       string
 }
 
-type Header struct {
-	Id        string
-	Title     string
-	Arguments string
-}
-
 type Notification struct {
 	AppID               string
 	Title               string
 	Message             string
 	Icon                string
+	Hero                string
+	InlineImage         string
 	ActivationType      ActivationType
 	Scenario            Scenario
 	ActivationArguments string
@@ -141,6 +121,8 @@ type Notification struct {
 	Audio               Audio
 	Loop                bool
 	Duration            Duration
+	HintCropCircle      bool
+	Attribution         string
 }
 
 func (n *Notification) applyDefaults() {
