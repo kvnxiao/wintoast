@@ -72,7 +72,7 @@ func init() {
 $APP_ID = '{{if .AppID}}{{.AppID}}{{else}}Windows App{{end}}'
 
 $template = @"
-<toast activationType="{{.ActivationType}}" launch="{{.ActivationArguments}}" duration="{{.Duration}}">
+<toast activationType="{{.ActivationType}}" {{if .ActivationArguments}}launch="{{.ActivationArguments}}"{{end}} duration="{{.Duration}}">
     <visual>
         <binding template="ToastGeneric">
             {{if .Icon}}<image placement="appLogoOverride" {{if .HintCropCircle}}hint-crop="circle"{{end}} src="{{.Icon}}" />{{end}}
@@ -87,7 +87,7 @@ $template = @"
     {{if .Actions}}
     <actions>
         {{range .Actions}}
-        <action activationType="{{.ActivationType}}" content="{{.Content}}" arguments="{{.Arguments}}" />
+        <action activationType="{{.ActivationType}}" content="{{.Content}}" arguments="{{.Arguments}}" imageUri="{{.ImageURI}}" />
         {{end}}
     </actions>
     {{end}}
